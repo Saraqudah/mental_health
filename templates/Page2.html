@@ -1,0 +1,164 @@
+﻿<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>🧠 Mental Health Assessment</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gradient-to-br from-indigo-200 to-purple-300 min-h-screen flex items-center justify-center">
+
+
+    <form method="post" action="/predict" class="w-full max-w-2xl bg-white p-8 pt-12 rounded-2xl shadow-2xl space-y-6 mt-24 relative">
+        <!-- زر التبديل (ثابت أعلى يمين الفورم) -->
+        <div class="absolute top-4 right-4 z-10">
+            <button type="button" onclick="toggleLanguage()" class="text-sm font-semibold text-blue-700 underline flex items-center gap-1 bg-white p-2 rounded shadow">
+                🔄 <span id="lang-btn-label">Switch Language</span>
+            </button>
+        </div>
+
+        <div class="flex justify-center relative" style="top: -20px;">
+            <img src="{{ url_for('static', filename='mental_health.jpg') }}" alt="Logo" class="w-36 h-auto">
+        </div>
+        <!-- العنوان -->
+        <h2 class="text-3xl font-bold text-center text-gray-800 mb-6 mt-2" data-en="🧠 Mental Health Assessment Form" data-ar="🧠 استبيان الصحة النفسية">
+            🧠 Mental Health Assessment Form
+        </h2>
+
+        <!-- الرسالة -->
+        <p class="text-center text-gray-600 mb-6 font-medium text-lg max-h-48 overflow-auto"
+           data-en="Hello!, We’re here to support you on your journey to mental well-being. We appreciate your courage in taking this step, and we’re ready to listen and assist you at every stage. Remember, you're not alone."
+           data-ar="مرحبًا! نحن هنا لدعمك في رحلتك نحو الصحة النفسية. نُقدّر شجاعتك لاتخاذ هذه الخطوة، ونحن مستعدون للاستماع والمساعدة في كل مرحلة. تذكر، لست وحدك.">
+            Hello!, We’re here to support you on your journey to mental well-being. We appreciate your courage in taking this step, and we’re ready to listen and assist you at every stage. Remember, you're not alone.
+        </p>
+
+        <!-- Hidden inputs -->
+        <input type="hidden" name="name" value="{{ name }}">
+        <input type="hidden" name="email" value="{{ email }}">
+        <input type="hidden" name="marital_status" value="{{ marital_status }}">
+        <input type="hidden" name="location" value="{{ location }}">
+        <input type="hidden" name="education" value="{{ education }}">
+
+        <!-- Age -->
+        <div class="bg-yellow-50 p-4 rounded-xl shadow-md">
+            <label class="block text-left text-yellow-700 font-bold text-lg mb-1" data-en="🕒 Age" data-ar="🕒 العمر">🕒 Age</label>
+            <input type="number" name="age" class="w-full border border-yellow-200 rounded-lg p-2 text-left focus:outline-yellow-500" placeholder="Enter your age" required min="15" step="1">
+        </div>
+
+        <!-- Gender -->
+        <div class="bg-pink-50 p-4 rounded-xl shadow-md">
+            <label class="block text-left text-pink-700 font-bold text-lg mb-1" data-en="👤 Gender" data-ar="👤 الجنس">👤 Gender</label>
+            <select name="gender" class="w-full border border-pink-200 rounded-lg p-2 text-left focus:outline-pink-500">
+                <option value="" data-en="Select" data-ar="اختر">Select</option>
+                <option value="Male" data-en="Male" data-ar="ذكر">Male</option>
+                <option value="Female" data-en="Female" data-ar="أنثى">Female</option>
+            </select>
+        </div>
+
+        <!-- Mood Score -->
+        <div class="bg-green-50 p-4 rounded-xl shadow-md">
+            <label class="block text-left text-green-700 font-bold text-lg mb-1" data-en="😊 Mood Score" data-ar="😊 مستوى المزاج">😊 Mood Score</label>
+            <select id="mood_score" name="mood_score" class="w-full border border-green-200 rounded-lg p-2 text-left focus:outline-green-500">
+                <option value="" data-en="Select" data-ar="اختر">Select</option>
+            </select>
+        </div>
+
+        <!-- Physical Activity -->
+        <div class="bg-red-50 p-4 rounded-xl shadow-md">
+            <label class="block text-left text-yellow-700 font-bold text-lg mb-1" data-en="🏃‍♂ Physical Activity" data-ar="🏃‍♂ النشاط البدني">🏃‍♂ Physical Activity</label>
+            <select id="physical_activity" name="physical_activity" class="w-full border border-red-200 rounded-lg p-2 text-left focus:outline-red-500">
+                <option value="" data-en="Select" data-ar="اختر">Select</option>
+            </select>
+        </div>
+
+        <!-- Sleep Quality -->
+        <div class="bg-blue-50 p-4 rounded-xl shadow-md">
+            <label class="block text-left text-blue-700 font-bold text-lg mb-1" data-en="🌙 Sleep Quality" data-ar="🌙 جودة النوم">🌙 Sleep Quality</label>
+            <select id="sleep_quality" name="sleep_quality" class="w-full border border-blue-200 rounded-lg p-2 text-left focus:outline-blue-500">
+                <option value="" data-en="Select" data-ar="اختر">Select</option>
+            </select>
+        </div>
+
+        <!-- Stress Level -->
+        <div class="bg-purple-50 p-4 rounded-xl shadow-md">
+            <label class="block text-left text-purple-700 font-bold text-lg mb-1" data-en="⚡ Stress Level" data-ar="⚡ مستوى التوتر">⚡ Stress Level</label>
+            <select id="stress_level" name="stress_level" class="w-full border border-purple-200 rounded-lg p-2 text-left focus:outline-purple-500">
+                <option value="" data-en="Select" data-ar="اختر">Select</option>
+            </select>
+        </div>
+
+        <!-- Back Button -->
+        <button type="button" onclick="window.location.href='/'" class="w-full bg-gray-300 text-gray-800 py-3 rounded-xl hover:bg-gray-400 font-bold text-lg shadow-lg" data-en="🔙 Back" data-ar="🔙 رجوع">
+            🔙 Back
+        </button>
+
+        <!-- Submit -->
+        <button type="submit" class="w-full bg-indigo-600 text-white py-3 rounded-xl hover:bg-indigo-700 font-bold text-lg shadow-lg" data-en="🚀 Submit Form" data-ar="🚀 إرسال النموذج">
+            🚀 Submit Form
+        </button>
+    </form>
+
+
+    <script>
+    // التوصيفات حسب الحقل
+        const standardDescriptions = {
+            1: { en: "1 (Very Bad)", ar: "1 (سيء جدًا)" },
+            2: { en: "2 (Bad)", ar: "2 (سيء)" },
+            3: { en: "3 (Poor)", ar: "3 (ضعيف)" },
+            4: { en: "4 (Below Average)", ar: "4 (أقل من المتوسط)" },
+            5: { en: "5 (Average)", ar: "5 (متوسط)" },
+            6: { en: "6 (Slightly Better)", ar: "6 (فوق المتوسط قليلاً)" },
+            7: { en: "7 (Good)", ar: "7 (جيد)" },
+            8: { en: "8 (Very Good)", ar: "8 (جيد جدًا)" },
+            9: { en: "9 (Great)", ar: "9 (عظيم)" },
+            10: { en: "10 (Excellent)", ar: "10 (ممتاز)" }
+        };
+
+        const reversedDescriptions = {
+            1: { en: "1 (Excellent)", ar: "1 (ممتاز)" },
+            2: { en: "2 (Very Good)", ar: "2 (جيد جدًا)" },
+            3: { en: "3 (Good)", ar: "3 (جيد)" },
+            4: { en: "4 (Above Average)", ar: "4 (فوق المتوسط)" },
+            5: { en: "5 (Average)", ar: "5 - متوسط" },
+            6: { en: "6 (Slightly Bad)", ar: "6 (سيء قليلاً)" },
+            7: { en: "7 (Bad)", ar: "7 (سيء)" },
+            8: { en: "8 (Very Bad)", ar: "8 (سيء جدًا)" },
+            9: { en: "9 (Awful)", ar: "9 (مرهق جدًا)" },
+            10: { en: "10 (Extremely Stressful)", ar: "10 (مرهق للغاية)" }
+        };
+
+        const fields = ['mood_score', 'sleep_quality', 'stress_level', 'physical_activity'];
+        fields.forEach(fieldId => {
+            const select = document.getElementById(fieldId);
+            const descriptions = fieldId === 'stress_level' ? reversedDescriptions : standardDescriptions;
+
+            for (let i = 1; i <= 10; i++) {
+                const option = document.createElement('option');
+                option.value = i;
+                option.setAttribute("data-en", descriptions[i].en);
+                option.setAttribute("data-ar", descriptions[i].ar);
+                option.textContent = descriptions[i].en; // Default English
+                select.appendChild(option);
+            }
+        });
+
+        // تبديل اللغة
+        let currentLang = "en";
+        function toggleLanguage() {
+            currentLang = currentLang === "en" ? "ar" : "en";
+            document.body.dir = currentLang === "ar" ? "rtl" : "ltr";
+
+            document.querySelectorAll('[data-en]').forEach(el => {
+                el.textContent = el.dataset[currentLang];
+            });
+
+            document.getElementById("lang-btn-label").textContent = currentLang === "en" ? "Switch Language" : "تبديل اللغة";
+
+            document.querySelectorAll('option[data-en]').forEach(el => {
+                el.textContent = el.dataset[currentLang];
+            });
+        }</script>
+
+
+</body>
+</html>

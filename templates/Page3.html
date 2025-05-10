@@ -1,0 +1,142 @@
+﻿<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8" />
+    <title>Your Mental Health Results</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gradient-to-r from-indigo-200 to-purple-300 min-h-screen flex items-center justify-center px-4 py-10 relative">
+
+
+    <form method="post" action="/predict" class="w-full max-w-4xl px-4 mt-16 relative">
+
+        <div class="min-h-screen flex items-center justify-center">
+
+
+            <div class="bg-white shadow-2xl rounded-3xl p-10 max-w-2xl w-full space-y-6 relative">
+
+                <!-- زر التبديل (ثابت أعلى يمين الفورم) -->
+                <div class="absolute top-4 right-4 z-10">
+                    <button type="button" onclick="toggleLanguage()" class="text-sm font-semibold text-blue-700 underline flex items-center gap-1 bg-white p-2 rounded shadow">
+                        🔄 <span id="lang-btn-label">Switch Language</span>
+                    </button>
+                </div>
+
+                <div class="flex justify-center relative" style="top: -20px;">
+                    <img src="{{ url_for('static', filename='mental_health.jpg') }}" alt="Logo" class="w-36 h-auto">
+                </div>
+
+                <h1 class="text-3xl font-bold text-center text-indigo-800 mb-4" data-en="🧠 Mental Health Summary" data-ar="🧠 ملخص صحتك النفسية">
+                    🧠 Mental Health Summary
+                </h1>
+
+                <div class="space-y-4">
+                    <!-- Diagnosis -->
+                    <div class="bg-indigo-50 border-l-4 border-indigo-400 p-4 rounded-xl shadow-sm">
+                        <h2 class="text-xl font-semibold text-indigo-800" data-en="Diagnosis" data-ar="التشخيص">Diagnosis</h2>
+                        <p class="text-gray-700">{{ diagnosis }}</p>
+                    </div>
+
+                    <!-- Medication -->
+                    <div class="bg-green-50 border-l-4 border-green-400 p-4 rounded-xl shadow-sm">
+                        <h2 class="text-xl font-semibold text-green-800" data-en="Medication" data-ar="الدواء">Medication</h2>
+                        <p class="text-gray-700">{{ medication }}</p>
+                    </div>
+
+                    <!-- Therapy -->
+                    <div class="bg-blue-50 border-l-4 border-blue-400 p-4 rounded-xl shadow-sm">
+                        <h2 class="text-xl font-semibold text-blue-800" data-en="Therapy Type" data-ar="نوع العلاج">Therapy Type</h2>
+                        <p class="text-gray-700">{{ therapy }}</p>
+                    </div>
+
+                    <!-- Emotion -->
+                    <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-xl shadow-sm">
+                        <h2 class="text-xl font-semibold text-yellow-800" data-en="AI-Detected Emotional State" data-ar="الحالة العاطفية (بتحليل الذكاء الاصطناعي)">AI-Detected Emotional State</h2>
+                        <p class="text-gray-700">{{ emotion }}</p>
+                    </div>
+
+                    <!-- Outcome -->
+                    <div class="bg-purple-100 border-l-4 border-purple-400 p-4 rounded-xl shadow-sm">
+                        <h2 class="text-xl font-semibold text-yellow-800" data-en="Outcome" data-ar="النتيجة">Outcome</h2>
+                        <p class="text-gray-700">{{ outcome }}</p>
+                    </div>
+
+                    <!-- Emotion Message -->
+                    {% if emotion_message %}
+                    <div class="bg-indigo-50 border-l-4 border-indigo-300 p-4 rounded-xl shadow-sm">
+                        <h2 class="text-lg font-semibold text-indigo-700" data-en="💬 Insight Based on Your Emotional State" data-ar="💬 نظرة مستندة إلى حالتك العاطفية">💬 Insight Based on Your Emotional State</h2>
+                        <p class="text-gray-700">{{ emotion_message }}</p>
+                    </div>
+                    {% endif %}
+
+                    <!-- Treatment Progress -->
+                    <div class="bg-green-50 border-l-4 border-green-400 p-4 rounded-xl shadow-sm">
+                        <h2 class="text-lg font-semibold text-green-800" data-en="📈 Treatment Progress" data-ar="📈 تقدم العلاج">📈 Treatment Progress</h2>
+
+                        {% if not is_new_user %}
+                        <div class="w-full bg-green-100 rounded-full h-4 mt-2">
+                            <div class="bg-green-500 h-4 rounded-full transition-all duration-500" style="width: {{ progress * 10 }}%;"></div>
+                        </div>
+                        <p class="text-sm text-gray-600 mt-1" data-en="Current progress level: {{ progress }}/10" data-ar="مستوى التقدم الحالي: {{ progress }}/10">Current progress level: {{ progress }}/10</p>
+                        {% else %}
+                        <p class="text-sm text-gray-500 mt-1 mt-2" data-en="👀 Progress will be available after at least one week of treatment" data-ar="👀 سيكون التقدم متاحًا بعد أسبوع على الأقل من العلاج">👀 Progress will be available after at least one week of treatment</p>
+                        {% endif %}
+                    </div>
+
+                    <!-- Adherence to Treatment -->
+                    <div class="bg-blue-50 border-l-4 border-blue-400 p-4 rounded-xl shadow-sm">
+                        <h2 class="text-lg font-semibold text-blue-800" data-en="🧭 Adherence to Treatment" data-ar="🧭 الالتزام بالعلاج">🧭 Adherence to Treatment</h2>
+                        <div class="w-full bg-blue-100 rounded-full h-4 mt-2">
+                            <div class="bg-blue-500 h-4 rounded-full transition-all duration-500" style="width: {{ adherence }}%;"></div>
+                        </div>
+                        <p class="text-sm text-gray-600 mt-1" data-en="Your adherence level: {{ adherence }}%" data-ar="مستوى التزامك: {{ adherence }}%">Your adherence level: {{ adherence }}%</p>
+                    </div>
+
+                    <!-- Treatment Timeline Info -->
+                    {% if treatment_start_date and treatment_duration_weeks %}
+                    {% if diagnosis != 'No Disorder' and medication != 'None' and therapy != 'None' %}
+                    <div class="bg-gray-50 border-l-4 border-gray-400 p-4 rounded-xl shadow-sm">
+                        <h2 class="text-lg font-semibold text-gray-800" data-en="📅 Treatment Timeline" data-ar="📅 الجدول الزمني للعلاج">📅 Treatment Timeline</h2>
+                        <p class="text-gray-700" data-en="Started on: {{ treatment_start_date }}" data-ar="تاريخ البدء: {{ treatment_start_date }}">Started on: {{ treatment_start_date }}</p>
+                        <p class="text-gray-700" data-en="Planned duration: {{ treatment_duration_weeks }} week(s)" data-ar="المدة المخططة: {{ treatment_duration_weeks }} أسبوع/أسابيع">Planned duration: {{ treatment_duration_weeks }} week(s)</p>
+
+                        {% if not is_new_user %}
+                        {% if weeks_remaining is not none %}
+                        <p class="text-gray-700 font-medium" data-en="⏳ Weeks remaining: {{ weeks_remaining }}" data-ar="⏳ عدد الأسابيع المتبقية: {{ weeks_remaining }}">⏳ Weeks remaining: {{ weeks_remaining }}</p>
+                        {% endif %}
+                        <p class="text-green-800 font-semibold bg-green-100 inline p-1 rounded-lg mt-2" data-en="💪 Continue the treatment" data-ar="💪 استمر بالعلاج">💪 Continue the treatment</p>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                    {% endif %}
+
+
+
+                    <!-- Motivational Message -->
+                    <div class="mt-6 bg-purple-100 p-4 rounded-xl shadow-inner text-purple-900 text-center">
+                        <p class="text-lg font-medium" data-en="💡 Remember:" data-ar="💡 تذكّر:">💡 Remember:</p>
+                        <p class="italic" data-en="Your mental health journey is unique, and every step you take is a step toward healing. Don’t hesitate to reach out to professionals, and be kind to yourself along the way." data-ar="رحلتك في الصحة النفسية فريدة من نوعها، وكل خطوة تخطوها تقربك من الشفاء. لا تتردد في التواصل مع المختصين وكن لطيفًا مع نفسك.">Your mental health journey is unique, and every step you take is a step toward healing. Don’t hesitate to reach out to professionals, and be kind to yourself along the way.</p>
+                    </div>
+
+                    <div class="flex justify-center mt-6">
+                        <a href="/" class="bg-indigo-600 text-white px-6 py-3 rounded-xl text-lg font-semibold hover:bg-indigo-700 transition" data-en="🏠 Return Home" data-ar="🏠 العودة للصفحة الرئيسية">🏠 Return Home</a>
+                    </div>
+                </div>
+            </div>
+    </form>
+
+    <!-- كود تبديل اللغة -->
+    <script>
+    let currentLang = "en";
+        function toggleLanguage() {
+            currentLang = currentLang === "en" ? "ar" : "en";
+            document.body.dir = currentLang === "ar" ? "rtl" : "ltr";
+
+            document.querySelectorAll('[data-en]').forEach(el => {
+                el.textContent = el.dataset[currentLang];
+            });
+
+            document.getElementById("lang-btn-label").textContent = currentLang === "en" ? "Switch Language" : "تبديل اللغة";
+        }</script>
+</body>
+</html>

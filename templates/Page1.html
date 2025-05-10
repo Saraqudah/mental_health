@@ -1,0 +1,98 @@
+﻿<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Personal Information Form</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gradient-to-br from-indigo-200 to-purple-300 min-h-screen flex items-center justify-center">
+
+    <form method="POST" action="/save_personal_info" class="w-full max-w-2xl bg-white p-8 pt-14 rounded-2xl shadow-2xl space-y-6 text-left relative">
+
+        <!-- زر التبديل داخل الفورم (ثابت أعلى اليمين) -->
+        <div class="absolute top-4 right-4 z-10">
+            <button type="button" onclick="toggleLanguage()" class="text-sm font-semibold text-blue-700 underline flex items-center gap-1 bg-white p-2 rounded shadow">
+                🔄 <span id="lang-btn-label">Switch Language</span>
+            </button>
+        </div>
+
+        <div class="flex justify-center relative" style="top: -40px;">
+            <img src="{{ url_for('static', filename='mental_health.jpg') }}" alt="Logo" class="w-36 h-auto">
+        </div>
+        <h2 class="text-2xl font-bold text-center text-gray-800 mb-6 mt-0 relative -top-6">📝 Personal Information Form</h2>
+
+
+
+
+
+
+        <!-- Username -->
+        <div class="bg-gray-50 p-4 rounded-xl shadow-md">
+            <label class="block text-gray-700 font-bold text-lg mb-1" for="username" data-en="👤 Username" data-ar="👤 الاسم">👤 Username</label>
+            <input id="username" name="name" type="text" class="w-full border border-gray-300 rounded-lg p-2 focus:outline-blue-500" required />
+        </div>
+
+        <!-- Email -->
+        <div class="bg-gray-50 p-4 rounded-xl shadow-md">
+            <label class="block text-gray-700 font-bold text-lg mb-1" for="email" data-en="📧 Email" data-ar="📧 البريد الإلكتروني">📧 Email</label>
+            <input id="email" name="email" type="email" class="w-full border border-gray-300 rounded-lg p-2 focus:outline-blue-500" required />
+        </div>
+
+        <!-- Marital Status -->
+        <div class="bg-pink-50 p-4 rounded-xl shadow-md">
+            <label class="block text-pink-700 font-bold text-lg mb-1" for="marital_status" data-en="💍 Marital Status" data-ar="💍 الحالة الاجتماعية">💍 Marital Status</label>
+            <select id="marital_status" name="marital_status" class="w-full border border-pink-200 rounded-lg p-2 focus:outline-pink-500" required>
+                <option value="" data-en="Select" data-ar="اختر">Select</option>
+                <option value="married">Married / متزوج</option>
+                <option value="single">Single / أعزب</option>
+            </select>
+        </div>
+
+        <!-- Location -->
+        <div class="bg-green-50 p-4 rounded-xl shadow-md">
+            <label class="block text-green-700 font-bold text-lg mb-1" for="location" data-en="📍 Location" data-ar="📍 الموقع">📍 Location</label>
+            <select id="location" name="location" class="w-full border border-green-200 rounded-lg p-2 focus:outline-green-500" required>
+                <option value="" data-en="Select" data-ar="اختر">Select</option>
+                <option value="JO">Jordan / الأردن</option>
+                <option value="UAE">UAE / الإمارات</option>
+                <option value="USA">USA / أمريكا</option>
+                <option value="UK">UK / بريطانيا</option>
+                <option value="CA">Canada / كندا</option>
+                <option value="DZ">Algeria / الجزائر</option>
+                <option value="EG">Egypt / مصر</option>
+                <option value="IN">India / الهند</option>
+                <option value="LB">Lebanon / لبنان</option>
+                <option value="KR">South Korea / كوريا الجنوبية</option>
+                <option value="LY">Libya / ليبيا</option>
+                <option value="OM">Oman / عمان</option>
+                <option value="SA">Saudi Arabia / السعودية</option>
+                <option value="QA">Qatar / قطر</option>
+                <option value="YE">Yemen / اليمن</option>
+            </select>
+        </div>
+
+        <!-- Education -->
+        <div class="bg-blue-50 p-4 rounded-xl shadow-md">
+            <label class="block text-blue-700 font-bold text-lg mb-1" for="education" data-en="🎓 Education Level" data-ar="🎓 المستوى التعليمي">🎓 Education Level</label>
+            <input id="education" name="education" type="text" class="w-full border border-blue-300 rounded-lg p-2 focus:outline-blue-500" required />
+        </div>
+
+        <button type="submit" class="w-full bg-indigo-600 text-white py-3 rounded-xl hover:bg-indigo-700 font-bold text-lg shadow-lg" data-en="Next ➡" data-ar="التالي ➡">
+            Next ➡
+        </button>
+    </form>
+
+    <script>
+    let currentLang = "en";
+        function toggleLanguage() {
+            const elements = document.querySelectorAll('[data-en]');
+            currentLang = currentLang === "en" ? "ar" : "en";
+            document.body.dir = currentLang === "ar" ? "rtl" : "ltr";
+            elements.forEach(el => {
+                el.textContent = el.dataset[currentLang];
+            });
+            document.getElementById("lang-btn-label").textContent = currentLang === "en" ? "Switch Language" : "تبديل اللغة";
+        }</script>
+</body>
+</html>
