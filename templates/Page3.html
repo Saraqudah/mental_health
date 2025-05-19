@@ -23,7 +23,7 @@
                 </div>
 
                 <div class="flex justify-center relative" style="top: -20px;">
-                    <img src="{{ url_for('static', filename='mental_health.jpg') }}" alt="Logo" class="w-36 h-auto">
+                    <img src="{{ url_for('static', filename='mental_health.jpg') }}" alt="Logo" class="w-50 h-auto">
                 </div>
 
                 <h1 class="text-3xl font-bold text-center text-indigo-800 mb-4" data-en="🧠 Mental Health Summary" data-ar="🧠 ملخص صحتك النفسية">
@@ -49,11 +49,78 @@
                         <p class="text-gray-700">{{ therapy }}</p>
                     </div>
 
+
                     <!-- Emotion -->
                     <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-xl shadow-sm">
                         <h2 class="text-xl font-semibold text-yellow-800" data-en="AI-Detected Emotional State" data-ar="الحالة العاطفية (بتحليل الذكاء الاصطناعي)">AI-Detected Emotional State</h2>
-                        <p class="text-gray-700">{{ emotion }}</p>
+                        <p class="text-gray-700 text-lg flex items-center gap-2">
+                            {{ emotion }}
+                            {% if emotion == "Stressed" %}
+                            😣
+                            {% elif emotion == "Happy" %}
+                            😄
+                            {% elif emotion == "Anxious" %}
+                            😰
+                            {% elif emotion == "Depressed" %}
+                            😞
+                            {% elif emotion == "Excited" %}
+                            🤩
+                            {% elif emotion == "Neutral" %}
+                            😐
+                            {% else %}
+                            ❓
+                            {% endif %}
+                        </p>
+
+
+                        {% if emotion in ["Happy", "Excited"] and diagnosis !="No Disorder" %}
+
+                        {% if diagnosis == "Major Depressive Disorder" %}
+                        <div class="mt-3 bg-indigo-100 border-l-4 border-indigo-400 p-3 rounded-lg shadow-sm">
+                            <h3 class="text-md font-semibold text-indigo-800 mb-1" data-en="💡 Note:" data-ar="💡 ملاحظة:">💡 Note:</h3>
+                            <p class="text-sm text-indigo-700"
+                               data-en="The diagnosis suggests major depression, but your current emotional state is positive. Please review the symptoms with a professional."
+                               data-ar="التشخيص يشير إلى اكتئاب شديد، لكن حالتك النفسية الحالية إيجابية. يُفضل مراجعة الأعراض مع مختص.">
+                                The diagnosis suggests major depression, but your current emotional state is positive. Please review the symptoms with a professional.
+                            </p>
+                        </div>
+
+                        {% elif diagnosis == "Panic Disorder" %}
+                        <div class="mt-3 bg-indigo-100 border-l-4 border-indigo-400 p-3 rounded-lg shadow-sm">
+                            <h3 class="text-md font-semibold text-indigo-800 mb-1" data-en="💡 Note:" data-ar="💡 ملاحظة:">💡 Note:</h3>
+                            <p class="text-sm text-indigo-700"
+                               data-en="The diagnosis indicates a panic disorder, but your emotional state is positive. Consider discussing this with a professional."
+                               data-ar="التشخيص يشير إلى اضطراب الهلع، لكن حالتك النفسية الحالية إيجابية. من الأفضل مناقشة ذلك مع مختص.">
+                                The diagnosis indicates a panic disorder, but your emotional state is positive. Consider discussing this with a professional.
+                            </p>
+                        </div>
+
+                        {% elif diagnosis == "Generalized Anxiety" %}
+                        <div class="mt-3 bg-indigo-100 border-l-4 border-indigo-400 p-3 rounded-lg shadow-sm">
+                            <h3 class="text-md font-semibold text-indigo-800 mb-1" data-en="💡 Note:" data-ar="💡 ملاحظة:">💡 Note:</h3>
+                            <p class="text-sm text-indigo-700"
+                               data-en="You may have generalized anxiety, but your current mood is good. A follow-up with a specialist is still advised."
+                               data-ar="قد يكون لديك قلق عام، لكن حالتك النفسية جيدة. مع ذلك يُنصح بمتابعة مع مختص.">
+                                You may have generalized anxiety, but your current mood is good. A follow-up with a specialist is still advised.
+                            </p>
+                        </div>
+
+                        {% elif diagnosis == "Bipolar Disorder" %}
+                        <div class="mt-3 bg-indigo-100 border-l-4 border-indigo-400 p-3 rounded-lg shadow-sm">
+                            <h3 class="text-md font-semibold text-indigo-800 mb-1" data-en="💡 Note:" data-ar="💡 ملاحظة:">💡 Note:</h3>
+                            <p class="text-sm text-indigo-700"
+                               data-en="Bipolar disorder involves mood swings. Even if you're feeling positive now, consistent professional care is important."
+                               data-ar="اضطراب ثنائي القطب يتضمن تقلبات في المزاج. حتى لو كنت تشعر بحالة جيدة الآن، من المهم المتابعة مع مختص.">
+                                Bipolar disorder involves mood swings. Even if you're feeling positive now, consistent professional care is important.
+                            </p>
+                        </div>
+                        {% endif %}
+                        {% endif %}
+
+
+
                     </div>
+
 
                     <!-- Outcome -->
                     <div class="bg-purple-100 border-l-4 border-purple-400 p-4 rounded-xl shadow-sm">
@@ -68,6 +135,8 @@
                         <p class="text-gray-700">{{ emotion_message }}</p>
                     </div>
                     {% endif %}
+
+
 
                     <!-- Treatment Progress -->
                     <div class="bg-green-50 border-l-4 border-green-400 p-4 rounded-xl shadow-sm">

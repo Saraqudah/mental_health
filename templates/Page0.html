@@ -1,0 +1,79 @@
+﻿<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <title>Mental Health ChatBot</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gradient-to-br from-indigo-200 to-purple-300 min-h-screen flex items-center justify-center">
+
+    <!-- الفورم الكامل -->
+    <div class="bg-white p-10 rounded-3xl shadow-2xl w-[95%] max-w-3xl relative text-center border border-gray-200">
+
+        <!-- زر التبديل داخل الفورم ومثبت -->
+        <div class="absolute top-4 right-4">
+            <button type="button" onclick="toggleLanguage()"
+                    class="text-sm font-semibold text-blue-700 underline flex items-center gap-1 bg-white p-2 rounded shadow">
+                🔄 <span id="lang-btn-label">Switch Language</span>
+            </button>
+        </div>
+
+        <!-- العنوان -->
+        <h1 id="main-title" class="text-4xl font-black mb-4 text-gray-800"
+            data-en="Mental Health ChatBot"
+            data-ar="روبوت الصحة النفسية">
+            Mental Health ChatBot
+        </h1>
+
+
+        <!-- الشعار -->
+        <div class="flex justify-center mb-6 mt-4">
+            <img src="{{ url_for('static', filename='mental_health.jpg') }}" alt="Logo" class="w-50 h-auto">
+        </div>
+
+        <!-- ملاحظة الخصوصية -->
+        <div class="bg-blue-50 border border-blue-200 text-blue-800 text-sm rounded-lg px-5 py-3 mb-6 inline-flex items-center gap-3 shadow-sm mx-auto">
+            <span class="text-lg">🔒</span>
+            <p id="anon-note"
+               data-en="You're welcome to proceed anonymously if you don't want to share your name."
+               data-ar="مرحبًا بك حتى دون ذكر اسمك ، يمكنك المتابعة كمجهول الهوية.">
+                You're welcome to proceed anonymously if you don't want to share your name.
+            </p>
+        </div>
+
+
+
+        <!-- الوصف -->
+        <p id="main-desc" class="text-gray-700 mb-8 leading-relaxed text-lg"
+           data-en="Psychological support system using artificial intelligence technologies."
+           data-ar="نظام دعم نفسي باستخدام تقنيات الذكاء الاصطناعي.">
+            Psychological support system using artificial intelligence technologies.
+        </p>
+
+        <!-- زر البدء -->
+        <a href="/Page1">
+            <button id="start-btn"
+                    class="bg-purple-600 hover:bg-purple-700 text-white text-lg font-semibold px-10 py-3 rounded-full shadow-lg transition duration-300"
+                    data-en="Start Now"
+                    data-ar="ابدأ الآن">
+                Start Now
+            </button>
+        </a>
+    </div>
+
+    <!-- سكربت تبديل اللغة -->
+    <script>
+        let currentLang = "en";
+        function toggleLanguage() {
+            const elements = document.querySelectorAll('[data-en]');
+            currentLang = currentLang === "en" ? "ar" : "en";
+            document.body.dir = currentLang === "ar" ? "rtl" : "ltr";
+            elements.forEach(el => {
+                el.textContent = el.dataset[currentLang];
+            });
+            document.getElementById("lang-btn-label").textContent = currentLang === "en" ? "Switch Language" : "تبديل اللغة";
+        }
+    </script>
+
+</body>
+</html>

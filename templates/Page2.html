@@ -10,18 +10,20 @@
 
 
     <form method="post" action="/predict" class="w-full max-w-2xl bg-white p-8 pt-12 rounded-2xl shadow-2xl space-y-6 mt-24 relative">
-        <!-- زر التبديل (ثابت أعلى يمين الفورم) -->
+        <!-- زر التبديل -->
         <div class="absolute top-4 right-4 z-10">
             <button type="button" onclick="toggleLanguage()" class="text-sm font-semibold text-blue-700 underline flex items-center gap-1 bg-white p-2 rounded shadow">
                 🔄 <span id="lang-btn-label">Switch Language</span>
             </button>
         </div>
 
-        <div class="flex justify-center relative" style="top: -20px;">
-            <img src="{{ url_for('static', filename='mental_health.jpg') }}" alt="Logo" class="w-36 h-auto">
+        <!-- الصورة -->
+        <div class="flex justify-center relative -mt-10">
+            <img src="{{ url_for('static', filename='mental_health.jpg') }}" alt="Logo" class="w-50 h-auto">
         </div>
+
         <!-- العنوان -->
-        <h2 class="text-3xl font-bold text-center text-gray-800 mb-6 mt-2" data-en="🧠 Mental Health Assessment Form" data-ar="🧠 استبيان الصحة النفسية">
+        <h2 class="text-3xl font-bold text-center text-gray-800 mb-4" data-en="🧠 Mental Health Assessment Form" data-ar="🧠 استبيان الصحة النفسية">
             🧠 Mental Health Assessment Form
         </h2>
 
@@ -98,9 +100,7 @@
         </button>
     </form>
 
-
     <script>
-    // التوصيفات حسب الحقل
         const standardDescriptions = {
             1: { en: "1 (Very Bad)", ar: "1 (سيء جدًا)" },
             2: { en: "2 (Bad)", ar: "2 (سيء)" },
@@ -137,12 +137,11 @@
                 option.value = i;
                 option.setAttribute("data-en", descriptions[i].en);
                 option.setAttribute("data-ar", descriptions[i].ar);
-                option.textContent = descriptions[i].en; // Default English
+                option.textContent = descriptions[i].en;
                 select.appendChild(option);
             }
         });
 
-        // تبديل اللغة
         let currentLang = "en";
         function toggleLanguage() {
             currentLang = currentLang === "en" ? "ar" : "en";
@@ -157,8 +156,8 @@
             document.querySelectorAll('option[data-en]').forEach(el => {
                 el.textContent = el.dataset[currentLang];
             });
-        }</script>
-
+        }
+    </script>
 
 </body>
 </html>
